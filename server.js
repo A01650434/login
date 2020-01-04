@@ -9,6 +9,7 @@ const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const flash = require('express-flash')
 const session =require('express-session')
+const methodOverride = require('method-override')
 
 //require passport function
 const initializePassport = require('./passport-config')
@@ -30,29 +31,30 @@ app.use(session({
 }))
 app.use(passport.initialize())//func inside pass to set the basics
 app.use(passport.session())//to make var persited during the cross of the entire session
+app.use(methodOverride('_method'))
 
 //set the route for application
-app.get('/', (req, res) => {
-    res.render('index.ejs', {name: 'Dafne'})
+app.get('/', checkAuthenticated, (req, res) => {
+    res.render('index.ejs', {name: req.user.name})
 })
 
 //Routes for views
-app.get('/login', (req, res) => { //verify user
+app.get('/login', checkNotAuthenticated, (req, res) => { //verify user
     res.render('login.ejs')
 })
 
-app.post('/login', passport.authenticate('local',{
+app.post('/login', checkNotAuthenticated ,passport.authenticate('local',{
    successRedirect: '/', //where to go when success
    failureRedirect: '/login',
    failureFlash: true
 }))
 
-app.get('/register', (req, res) => {
+app.get('/register', checkNotAuthenticated, (req, res) => {
     res.render('register.ejs')
 })
 
 //app for registering users
-app.post('/register', async (req,  res) => {
+app.post('/register', checkNotAuthenticated, async (req,  res) => {
     try{
         const hashedPassword = await bcrypt.hash(req.body.password,  10)//10 is fast and secure
         users.push({ //this would be automathically generated with a db
@@ -65,8 +67,34 @@ app.post('/register', async (req,  res) => {
     } catch {
         res.redirect('/register')
     }
-console.log(users);
+//  console.log(users);
 })
+
+//LogOut
+
+app.delete('/logout', (req, res) => {
+    req.logOut() //set by passport to clear the session 
+    res.redirect('/login')
+})
+
+
+//middleware funct
+function checkAuthenticated(req, res, next){
+  if(req.isAuthenticated()){
+      return next() //true
+  }  
+//flase it'll  redirect the user
+  res.redirect('/login')
+}
+
+//wont allows  to login if its already loged
+function checkNotAuthenticated(req, res, next){
+    if(req.isAuthenticated()){
+       return res.redirect('/')
+    }  
+    next()
+}
+
 
 //PORT
 app.listen(3000)
