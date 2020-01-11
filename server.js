@@ -10,7 +10,7 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session =require('express-session')
 const methodOverride = require('method-override')
-
+const  PORT = process.env.PORT || 3000;
 //require passport function
 const initializePassport = require('./passport-config')
 initializePassport(passport, 
@@ -21,10 +21,7 @@ initializePassport(passport,
 const users = []
 
 //Pointing its using .ejs
-<<<<<<< HEAD
 
-=======
->>>>>>> 49a6a62d521e3fb4aa04509268c2c5f3f7c171a2
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({extended: false}))//taking formas and bulding access
 //server to use passport
@@ -102,14 +99,9 @@ function checkNotAuthenticated(req, res, next){
 
 
 //PORT
-app.listen(3000, function() {
-<<<<<<< HEAD
+app.listen(PORT, function() {
     console.log('Example app')
 })
 
 //pasportjs for auth and persisting the user thru all the dif requests 
-=======
-    //console.log('Example app')
-})
->>>>>>> 49a6a62d521e3fb4aa04509268c2c5f3f7c171a2
 
