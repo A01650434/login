@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
+    "lint": "eslint --quiet .",
+    "fix": "eslint --fix .",
+    "test": "npm run lint && cross-env NODE_ENV=test mocha -u tdd --reporter spec --exit",
     "devStart": "nodemon server.js"
   },
   "author": "",
