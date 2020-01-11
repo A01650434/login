@@ -20,7 +20,8 @@ initializePassport(passport,
 //for  storing locally nodb (at every refresh it's gonna be deleted)
 const users = []
 //Pointing its using .ejs
-app.set('view-engine', 'ejs')
+
+app.set('view engine', 'ejs')
 app.use(express.urlencoded({extended: false}))//taking formas and bulding access
 //server to use passport
 app.use(flash())
@@ -40,7 +41,7 @@ app.get('/', checkAuthenticated, (req, res) => {
 
 //Routes for views
 app.get('/login', checkNotAuthenticated, (req, res) => { //verify user
-    res.render('login.ejs')
+    res.render('login')
 })
 
 app.post('/login', checkNotAuthenticated ,passport.authenticate('local',{
@@ -97,6 +98,9 @@ function checkNotAuthenticated(req, res, next){
 
 
 //PORT
-app.listen(3000)
+app.listen(3000, function() {
+    console.log('Example app')
+})
 
 //pasportjs for auth and persisting the user thru all the dif requests 
+
