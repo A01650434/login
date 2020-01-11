@@ -37,7 +37,8 @@ app.use(methodOverride('_method'))
 
 //set the route for application
 app.get('/', checkAuthenticated, (req, res) => {
-    res.render('index.ejs', {name: req.user.name})
+   // res.render('index.ejs', {name: req.user.name})
+   res.redirect("https://fierce-savannah-77178.herokuapp.com/#carousel-example-1z")
 })
 
 //Routes for views
